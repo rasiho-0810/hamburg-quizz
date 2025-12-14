@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Reise-Quiz</title>
+<style>
+body { font-family: Arial, sans-serif; background:#eef5ff; padding:20px; }
+.card { background:white; padding:20px; border-radius:10px; max-width:520px; margin:auto; }
+button { width:100%; padding:10px; margin:6px 0; }
+input { width:100%; padding:10px; margin:10px 0; }
+h1,h2 { text-align:center; }
+.hidden { display:none; }
+</style>
+</head>
+<body>
+
+<div class="card" id="start">
+  <h1>🎁 Reise-Quiz 🎁</h1>
+  <p>Wer bist du?</p>
+  <button onclick="startQuiz('anni')">👩 Anni</button>
+  <button onclick="startQuiz('mejko')">🧒 Mejko</button>
+  <button onclick="startQuiz('carla')">👧 Carla</button>
+  <button onclick="startQuiz('thea')">👧 Thea</button>
+</div>
+
+<div class="card hidden" id="quiz">
+  <h2 id="frage"></h2>
+  <div id="antworten"></div>
+</div>
+
+<div class="card hidden" id="passwortInfo">
+  <h2>🔐 Fast geschafft!</h2>
+  <p>Das Passwort für den Gutschein lautet:</p>
+  <h3 style="text-align:center;">HAMBURG2025</h3>
+  <button onclick="showPassword()">Zum Gutschein</button>
+</div>
+
+<div class="card hidden" id="login">
+  <h2>🔑 Gutschein freischalten</h2>
+  <input type="password" id="pw" placeholder="Passwort eingeben">
+  <button onclick="checkPassword()">Freischalten</button>
+  <p id="error" style="color:red;"></p>
+</div>
+
+<div class="card hidden" id="gutschein">
+  <h1>🎉 GUTSCHEIN 🎉</h1>
+  <p style="text-align:center;"><strong>Familien-Kurztrip nach HAMBURG</strong></p>
+  <p>
+    ⚓ Hafen & Landungsbrücken<br>
+    🎶 Elbphilharmonie<br>
+    🦁 Tierpark Hagenbeck / Miniatur Wunderland<br>
+    ❤️ Gemeinsame Zeit
+  </p>
+  <p>📅 Termin: Wird gemeinsam festgelegt</p>
+</div>
+
+<script>
+const richtigesPasswort = "HAMBURG2025";
+
+const quiz = {
+  anni: [
+    { f:"Diese Stadt liegt an der Elbe und hat einen großen Hafen.", a:["Bremen","Hamburg","Köln"] },
+    { f:"Wie heißt das berühmte Konzerthaus?", a:["Elbphilharmonie","Oper Nord","Musikdom"] }
+  ],
+  mejko: [
+    { f:"Wo steht das Miniatur Wunderland?", a:["Hamburg","Berlin","Leipzig"] },
+    { f:"Welche Tiere gibt es im Tierpark Hagenbeck?", a:["Nur Fische","Tiere aus aller Welt","Nur Bauernhoftiere"] }
+  ],
+  carla: [
+    { f:"Welche Stadt hat sehr viele Brücken?", a:["München","Hamburg","Frankfurt"] },
+    { f:"Was kann man dort gut anschauen?", a:["Skifahren","Schiffe im Hafen","Vulkane"] }
+  ],
+  thea: [
+    { f:"Welche Farbe hat der große Fluss durch die Stadt?", a:["Blau","Elbe","Grün"] },
+    { f:"Was gibt es im Hafen zu sehen?", a:["Schiffe","Dinosaurier","Raumschiffe"] }
+  ]
+};
+
+let person, index=0;
+
+function startQuiz(p){
+  person=p; index=0;
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion(){
+  const q=quiz[person][index];
+  document.getElementById("frage").innerText=q.f;
+  const a=document.getElementById("antworten");
+  a.innerHTML="";
+  q.a.forEach(t=>{
+    const b=document.createElement("button");
+    b.innerText=t;
+    b.onclick=next;
+    a.appendChild(b);
+  });
+}
+
+function next(){
+  index++;
+  if(index<quiz[person].length){
+    showQuestion();
+  } else {
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("passwortInfo").classList.remove("hidden");
+  }
+}
+
+function showPassword(){
+  document.getElementById("passwortInfo").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+
+function checkPassword(){
+  const pw=document.getElementById("pw").value;
+  if(pw===richtigesPasswort){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("gutschein").classList.remove("hidden");
+  } else {
+    document.getElementById("error").innerText="❌ Falsches Passwort";
+  }
+}
+</script>
+
+</body>
+</html>
